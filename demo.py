@@ -1,10 +1,10 @@
-from resolvers.deezer import DeezerResolver
-from resolvers.spotify import SpotifyResolver
-from resolvers.rdio import RdioResolver
-from resolvers.lastfm import LastfmResolver
-from resolvers.musicbrainz import MusicBrainzResolver
+from rslvr.resolvers.deezer import DeezerResolver
+from rslvr.resolvers.spotify import SpotifyResolver
+from rslvr.resolvers.rdio import RdioResolver
+from rslvr.resolvers.lastfm import LastfmResolver
+from rslvr.resolvers.musicbrainz import MusicBrainzResolver
 
-from resolver import ResolverService
+from rslvr.resolver import ResolverService
 
 resolvers = [
 	DeezerResolver,
