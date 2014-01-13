@@ -11,13 +11,19 @@ resolvers = [
 	SpotifyResolver,
   # RdioResolver,
 	LastfmResolver,
-	MusicBrainzResolver
+	# MusicBrainzResolver
 ]
 
 mr = ResolverService(resolvers)
 
-tracks = ['Autumn Leaves']
+tracks = [
+	('Bocuma', 'Boards of canada'),
+]
 
 for t in tracks:
-	r = mr.resolve(t, fields=['id', 'name', 'artist'], meta={'artist':'Roger Williams'})
+	r = mr.resolve(t[0], fields=['id', 'name', 'artist', 'artist_id'], meta={'artist': t[1]})
+	#r = mr.resolve(t, fields=['id', 'name', 'artist'])
 	print r.json(sort_keys=True, indent=4)
+	print '\n'
+	print '==============================='
+	print '\n'

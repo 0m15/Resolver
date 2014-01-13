@@ -1,4 +1,4 @@
-from resolvers import BaseResolver
+from . import BaseResolver
  
 class SpotifyResolver(BaseResolver):
 

@@ -1,4 +1,4 @@
-from resolvers import BaseResolver
+from . import BaseResolver
 import requests
 from requests_oauthlib import OAuth2
 from requests.auth import HTTPBasicAuth
