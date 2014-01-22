@@ -12,13 +12,22 @@ class LastfmResolver(BaseResolver):
 
 	# data map
 	json_root_key = 'results'
+
 	field_map = [
-    ('id',    	 		('mbid',)),
-    ('artist',   		('artist',)),
-    ('link',     		('url',)),
-    ('name',    		('name',)),
-    ('listeners',   ('listemers',))
-  ]
+	    ('id',    	 		('mbid',)),
+	    ('artist',   		('artist',)),
+	    ('link',     		('url',)),
+	    ('name',    		('name',)),
+	    ('listeners',   	('listemers',))
+  	]
 
 	def _parse(self, resp):
-		return resp.json()[self.json_root_key]['trackmatches']['track']
+		r = resp.json()[self.json_root_key]['trackmatches']['track']
+		if isinstance(r, dict):
+			return [r]
+		return r
+
+	def _is_valid_response(self, resp):
+		data = resp.json()
+		root_key = self.json_root_key
+		return (resp.status_code == 200 and root_key in data and 'track' in data[root_key]['trackmatches'])

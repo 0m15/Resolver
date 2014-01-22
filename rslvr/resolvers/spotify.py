@@ -16,6 +16,6 @@ class SpotifyResolver(BaseResolver):
         ('id',    	 		('href',)),
         ('album',    		('album', 'name')),
         ('artist',   		('artists', 0, 'name')),
-        ('artist_id',   ('artists', 0, 'href')),
+        ('artist_id',   	('artists', 0, 'href')),
         ('name',    		('name',)),
     ]

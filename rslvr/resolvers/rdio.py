@@ -30,10 +30,10 @@ class RdioResolver(BaseResolver):
 
 	field_map = [
         ('id',    	 		('key',)),
-        ('album',				('album',)),
+        ('album',			('album',)),
         ('artist',			('artist',)),
         ('artist_id',		('artistKey',)),
-        ('name',				('name',))
+        ('name',			('name',))
     ]
 
 	def __init__(self):
@@ -62,4 +62,4 @@ class RdioResolver(BaseResolver):
 		return getattr(requests, self.http_method)(url, auth=oauth, data=payload)
 
 	def _parse(self, resp):
-		return resp.json()[self.json_root_key]['results'][0]
+		return resp.json()[self.json_root_key]['results']

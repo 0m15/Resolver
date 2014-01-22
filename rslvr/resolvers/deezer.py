@@ -12,11 +12,12 @@ class DeezerResolver(BaseResolver):
 
 	# data mapping
 	json_root_key = 'data'
+	
 	field_map = [
         ('id',    	 		('id',)),
-        ('album',    		('album', 'title')),
-        ('artist',   		('artist', 'name')),
-        ('artist_id',   ('artist', 'id')),
+        ('album',    		('album', 'title',)),
+        ('artist',   		('artist', 'name',)),
+        ('artist_id',   	('artist', 'id',)),
         ('duration', 		('duration',)),
         ('link',     		('link',)),
         ('name',    		('title',)),

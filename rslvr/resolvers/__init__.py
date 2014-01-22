@@ -62,13 +62,13 @@ class BaseResolver():
 	# example field map
 	field_map = [
 		('id', 		 ('id')),	
-		('artist', ('artist', 'name')),
+		('artist',   ('artist', 'name')),
 	]
 
-	__results = {}
-  
-  # - end of attributes to override -
+  	# - end of attributes to override -
 
+  	__results = {}
+  	
 	def resolve(self, *args, **kwargs):
 		return self._search(*args, **kwargs)
 
@@ -76,6 +76,7 @@ class BaseResolver():
 		return json.dumps(self.__results, sort_keys=True)
 
 	def _search(self, *args, **kwargs):
+
 		self.default_fields = kwargs.get('fields', self.default_fields)
 		meta = kwargs.get('meta', {})
 
@@ -84,9 +85,8 @@ class BaseResolver():
 		queue = args[1] # process queue
 
 		resp = self._make_request(url, query)
-
 		if not self._is_valid_response(resp):
-			return {}
+			return queue.put({ self.__name__: None })
 		
 		entity = self._match_entity(self._parse(resp), meta)
 		return queue.put(self._results(entity))
@@ -98,26 +98,65 @@ class BaseResolver():
 		return requests.post(url, data=payload)
 
 	def _parse(self, resp):
+		print 'resp'
 		return resp.json()[self.json_root_key]
 
-	def _match_entity(self, data, meta):
-		entities = []
-		for item in data:
-			entities.append(self._map_item(item))
-		
-		for entity in entities:
-			if not meta:
-				return entity
-			for key in meta:
-				if entity[key].lower() == meta[key].lower(): 
-					return entity
-		return None
-
 	def _is_valid_response(self, resp):
+
 		root_key = self.json_root_key
 		return (resp.status_code == 200 
 	    				and root_key in resp.json()
 	    				and len(resp.json()[root_key]) > 0)
+
+	def _match_entity(self, data, meta):
+		entities = []
+		matched_parts = []
+
+		for item in data:
+			entities.append(self._map_item(item))
+
+		for entity in entities:
+			if not meta:
+				return entity
+
+			for key in meta:
+				if self._eq(meta[key], entity[key]):
+					matched_parts.append(key)
+
+			if len(matched_parts) == len(meta.items()):
+				return entity
+			else:
+				matched_parts = []
+
+	def _eq(self, a, b):
+		"""
+		Equality function. Can be overriden with any algorithm
+		you want, it accepts two strings to compare, `s1` and `s2`
+		and should return a `Boolean` based on the string comparison
+		results. 
+		"""
+		treshold = 0.9
+		a = a.lower()
+		b = b.lower()
+		if not len(a) or not len(b): 
+			return 0.0
+		if len(a) == 1:  a=a+u'.'
+		if len(b) == 1:  b=b+u'.'
+
+		a_bigram_list=[]
+		for i in range(len(a)-1):
+			a_bigram_list.append(a[i:i+2])
+		b_bigram_list=[]
+		for i in range(len(b)-1):
+			b_bigram_list.append(b[i:i+2])
+	 
+		a_bigrams = set(a_bigram_list)
+		b_bigrams = set(b_bigram_list)
+		overlap = len(a_bigrams & b_bigrams)
+		dice_coeff = overlap * 2.0/(len(a_bigrams) + len(b_bigrams))
+	    
+		return dice_coeff > treshold
+		
 
 	def _map_item(self, data):
 		mapped = {}
@@ -125,7 +164,10 @@ class BaseResolver():
 			k = field[0]
 			if not k in self.default_fields:
 				continue
-			mapped[k] = reduce(operator.getitem, field[1], data)
+			try:
+				mapped[k] = reduce(operator.getitem, field[1], data)
+			except KeyError:
+				pass
 		return mapped
 
 	def _results(self, data):

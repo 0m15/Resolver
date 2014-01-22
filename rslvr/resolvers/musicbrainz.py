@@ -15,8 +15,8 @@ class MusicBrainzResolver(BaseResolver):
 	field_map = [
         ('id',    	 		('id',)),
         #('album',    		('album', 'title')),
-        ('artist',   		('artist-credit', 0, 'artist', 'name')),
-        ('artist_id', 	('artist-credit', 0, 'artist', 'id')),
+        ('artist',   		('artist-credit', 0, 'artist', 'name',)),
+        ('artist_id', 		('artist-credit', 0, 'artist', 'id',)),
         ('duration', 		('duration',)),
         ('link',     		('link',)),
         ('name',    		('title',)),
