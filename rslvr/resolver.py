@@ -17,8 +17,8 @@ class ResolverService():
 	An example resolvers dict is like this:
 
 			resolvers = [
-				'spotify': SpotifyResolver
-				'rdio': RdioResolver
+				SpotifyResolver,
+				RdioResolver
 			]
 
 	You can register at runtime a new resolver,
