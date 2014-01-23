@@ -24,11 +24,11 @@ class ResolverService():
 	You can register at runtime a new resolver,
 	by invoking the:
 
-			register_resolver('name', ResolverClass):
+			register_resolver(ResolverClass):
 
 	function, i.e.:
 
-			register_resolver('rdio', RdioResolver)
+			r.register_resolver(RdioResolver)
 
 	by doing that, further requests will also try to match
 	the given query on that resolver as well.
