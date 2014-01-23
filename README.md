@@ -22,8 +22,10 @@ Features
 
 - Supports multiple concurrent requests by using python processes
 - Supports oAuth authentication (look at Rdio resolver class to see a working implementation)
-- Lets you write your Resolver in a few lines of python code
 - Supports methods to match strings and get the correct results
+- Lets you write your Resolver in a few lines of python code
+- Lets you easily map results fields to a consistent data-structure
+
 
 Todo
 ====
